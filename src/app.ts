@@ -22,7 +22,11 @@ var config = {
       userName: 'mainUser',
       password: 'password'
     }
-  }
+  },
+  options: {
+    trustServerCertificate: true,
+    trustedConnection: true
+    }
 }
 
 var connection = new Connection(config);
