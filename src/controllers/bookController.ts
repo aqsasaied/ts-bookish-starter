@@ -6,7 +6,6 @@ class BookController {
     constructor() {
         this.router = Router();
         this.router.get('/:id', this.getBook.bind(this));
-
         this.router.post('/', this.createBook.bind(this));
     }
 
