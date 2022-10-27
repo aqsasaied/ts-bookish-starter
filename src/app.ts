@@ -30,15 +30,36 @@ var config = {
 }
 
 var connection = new Connection(config);
-connection.on('connect', function(err) {
-    if (err) {
-     console.log(err);
-    } else {
-     console.log('Connected');
-    }
-   });
 
 connection.connect();
+
+function executeStatement() {
+    var request = new Request("select * from books;", function(err, rowCount) {
+      if (err) {
+        console.log(err);
+      } else {
+        
+      }
+    });
+
+    request.on('row', function(columns) {
+      columns.forEach(function(column) {
+        console.log(column.value);
+      });
+    });
+
+    connection.execSql(request);
+  }
+
+connection.on('connect', function(err){
+    if(err){
+        console.log(err);
+    }
+    else{
+        executeStatement();
+    }
+});
+
 /**
  * Primary app routes.
  */
