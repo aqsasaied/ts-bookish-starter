@@ -13,6 +13,7 @@ app.listen(port, () => {
 });
 var Connection = require('tedious').Connection;
 var Request = require('tedious').Request;
+var TYPES = require('tedious').TYPES;
 
 var config = {
   server: 'localhost',
@@ -33,23 +34,25 @@ var connection = new Connection(config);
 
 connection.connect();
 
+var arr: any[] =[];
+
 function executeStatement() {
-    var request = new Request("select * from books;", function(err, rowCount) {
+    var request = new Request("select * from books ", function(err, rowCount) {
       if (err) {
         console.log(err);
-      } else {
-        
-      }
-    });
-
+      } 
+    }); 
+    request.addOutputParameter('username', TYPES.VarChar);
     request.on('row', function(columns) {
       columns.forEach(function(column) {
-        console.log(column.value);
+        arr.push(column.value)
       });
+      console.log(arr);
     });
-
+    
     connection.execSql(request);
   }
+  
 
 connection.on('connect', function(err){
     if(err){
@@ -65,3 +68,6 @@ connection.on('connect', function(err){
  */
 app.use('/healthcheck', healthcheckRoutes);
 app.use('/books', bookRoutes);
+app.get( "/test", ( req, res ) => {
+    res.send( arr );
+} );
